@@ -1,7 +1,11 @@
 logLevel := Level.Warn
 
-addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.6.0")
+//resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
 
-addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.5.0")
+//resolvers += "sbt-idea-repo" at "http://mpeltonen.github.com/maven/"
 
-addSbtPlugin("org.xerial.sbt" % "sbt-pack" % "0.4.0")
+//addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.7.0-SNAPSHOT")
+
+//addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.5.0")
+
+//addSbtPlugin("org.xerial.sbt" % "sbt-pack" % "0.4.0")

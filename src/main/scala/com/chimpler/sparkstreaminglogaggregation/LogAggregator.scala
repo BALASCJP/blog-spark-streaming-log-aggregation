@@ -10,9 +10,10 @@ import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import reactivemongo.api._
-import reactivemongo.api.collections.default.BSONCollection
+import reactivemongo.api.collections.bson.BSONCollection
 import reactivemongo.bson._
 import MongoConversions._
+import scala.concurrent.Await
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -24,8 +25,9 @@ object LogAggregator extends App {
 
   implicit val aggHandler = Macros.handler[AggregationResult]
 
-  val db = connection("adlogdb")
-  val collection = db[BSONCollection]("impsPerPubGeo")
+  val duration = scala.concurrent.duration.Duration(10, "millis")
+  val db = Await.result(connection.database("adlogdb"), duration)
+  val collection = db.collection[BSONCollection]("impsPerPubGeo")
 
   val sparkContext = new SparkContext("local[4]", "logAggregator")
 
@@ -78,7 +80,7 @@ object LogAggregator extends App {
     }.collect()
 
     // save in MongoDB
-    logs.foreach(collection.save(_))
+    logs.foreach(collection.insert(_))
   }
 
   private def reduceAggregationLogs(aggLog1: AggregationLog, aggLog2: AggregationLog) = {
